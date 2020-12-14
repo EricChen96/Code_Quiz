@@ -4,7 +4,9 @@ var questionEl = document.querySelector("#questionEl");
 var optionsEl = document.querySelector("#options-list");
 var questionCount;
 var timeLeft;
+var highscore;
 quizContainerEl.setAttribute("style", "border: 5px solid blue;");
+
 
 var questions = [
     { q: "The data type to store 'true' or 'false' is: ", o: ["String", "Integer", "Boolean", "Objects"], a: "Boolean" },
@@ -48,6 +50,13 @@ function loadQuestion(questionCount) {
         option.setAttribute("index-number",i);       
         optionsEl.append(option);
     }
+}
+
+function endGame() {
+    quizContainerEl.innerHTML = "";
+    highscore = timeLeft;
+    var scoreDisplay = document.createElement("h2");
+    scoreDisplay.textContent = "Score" + highscore;
 }
 
 optionsEl.addEventListener("click", function(event) {
