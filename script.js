@@ -1,8 +1,8 @@
 var quizContainerEl = document.querySelector(".quizContainerEl");
 var headerEl = document.querySelector(".headerEl");
+var questionEl = document.querySelector(".questionEl");
+var optionsListEl = document.querySelector(".optionsListEl");
 quizContainerEl.setAttribute("style", "border: 5px solid blue;");
-
-quizContainerEl.textContent = "";
 
 var questions = [
     { q: "The data type to store 'true' or 'false' is: ", o: ["String", "Integer", "Boolean", "Objects"], a: "Boolean" },
@@ -19,52 +19,47 @@ function createMainScreen() {
 }
 
 function startGame() {
-    quizContainerEl.textContent = "";
-    var questionBoxEl = document.createElement("div");
-    quizContainerEl.append(questionBoxEl)
+    quizContainerEl.innerHTML = "";
     var questionCount = 0;
     var timeLeft = 10;
+    loadQuestion(questionCount);
     var timeInterval = setInterval(function () {
         headerEl.children[1].textContent = timeLeft;
-        questionBoxEl.textContent = questions[questionCount].q;
-
-        var optionButtonsEl = []
-        for(var i = 0; i<questions[questionCount].o.length; i++) {
-            optionButtonsEl.push(document.createElement("button"));
-            optionButtonsEl[i].textContent == questions[questionCount].o[i];
-            quizContainerEl.append(optionButtonsEl[i]);
-        }
-        
         timeLeft--;
-        if (timeLeft < 0 || questionCount === questions.length) {
+        if (timeLeft < 0) {
             clearInterval(timeInterval);
             quizContainerEl.textContent = "Game Over";
         }
     }, 1000)
 }
 
-function loadQuestion(questionNumber) {
 
+function loadQuestion(questionCount) {
+    quizContainerEl.innerHTML = "";
+    quizContainerEl.append(questionEl);
+    questionEl.textContent = questions[questionCount].q;
+
+    for (var i = 0; i < questions[questionCount].o.length; i++) {
+        var option = document.createElement("button");
+        questions[questionCount].o[i];
+
+        
+
+        optionsListEl.append(optionButtonsEl[i]);
+    }
 }
-        // questionBoxEl.textContent = questions[i].q;
-        // var optionButtonsEl[][] = [];
-        // for (var j = 0; j < questions[i].o.length; j++) {
-        //     optionButtonsEl[i].push(document.createElement("button"));
-        //     optionButtonsEl[i][j].textContent = questions[i].o[j];
-        //     quizContainerEl.append(optionButtonsEl[j]);
-        //     console.log(optionButtonsEl[i][j].textContent);
-        //     console.log(questions[i].a);
-        //     optionButtonsEl[j].addEventListener("click", function () {
-        //         console.log(optionButtonsEl[i][j]);
-        //         //     if(optionButtonsEl[j].textContent === questions[i].a){
-        //         //         timeLeft += 10;
-        //         //     }
-        //         //     else {
-        //         //         timeLeft -= 10;
-        //         //     }
-        //     });
 
-        // }
+
+    // optionButtonsEl.addEventListener("click", function () {
+
+    //         if(optionButtonsEl.textContent === questions[i].a){
+    //             timeLeft += 10;
+    //         }
+    //         else {
+    //             timeLeft -= 10;
+    //         }
+    // });
+
 
 
 createMainScreen();
