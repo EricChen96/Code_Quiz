@@ -20,32 +20,51 @@ function createMainScreen() {
 
 function startGame() {
     quizContainerEl.textContent = "";
-
-    for (var i = 0; i < questions.length; i++) {
-        var questionBoxEl = document.createElement("div");
-        quizContainerEl.append(questionBoxEl)
-        questionBoxEl.textContent = questions[i].q;
-        var optionButtonsEl = [];
-        for (var j = 0; j < questions[i].o.length; j++) {
-            optionButtonsEl.push(document.createElement("button"));
-            optionButtonsEl[j].textContent = questions[i].o[j];
-            optionButtonsEl[j].addEventListener("click",answerCheck);
-            quizContainerEl.append(optionButtonsEl[j]);
-        }
-    }
-
+    var questionBoxEl = document.createElement("div");
+    quizContainerEl.append(questionBoxEl)
+    var questionCount = 0;
     var timeLeft = 10;
     var timeInterval = setInterval(function () {
-
-        console.log(timeLeft);
         headerEl.children[1].textContent = timeLeft;
-        timeLeft--;
+        questionBoxEl.textContent = questions[questionCount].q;
 
-        if (timeLeft === 0) {
+        var optionButtonsEl = []
+        for(var i = 0; i<questions[questionCount].o.length; i++) {
+            optionButtonsEl.push(document.createElement("button"));
+            optionButtonsEl[i].textContent == questions[questionCount].o[i];
+            quizContainerEl.append(optionButtonsEl[i]);
+        }
+        
+        timeLeft--;
+        if (timeLeft < 0 || questionCount === questions.length) {
             clearInterval(timeInterval);
             quizContainerEl.textContent = "Game Over";
-
         }
     }, 1000)
 }
+
+function loadQuestion(questionNumber) {
+
+}
+        // questionBoxEl.textContent = questions[i].q;
+        // var optionButtonsEl[][] = [];
+        // for (var j = 0; j < questions[i].o.length; j++) {
+        //     optionButtonsEl[i].push(document.createElement("button"));
+        //     optionButtonsEl[i][j].textContent = questions[i].o[j];
+        //     quizContainerEl.append(optionButtonsEl[j]);
+        //     console.log(optionButtonsEl[i][j].textContent);
+        //     console.log(questions[i].a);
+        //     optionButtonsEl[j].addEventListener("click", function () {
+        //         console.log(optionButtonsEl[i][j]);
+        //         //     if(optionButtonsEl[j].textContent === questions[i].a){
+        //         //         timeLeft += 10;
+        //         //     }
+        //         //     else {
+        //         //         timeLeft -= 10;
+        //         //     }
+        //     });
+
+        // }
+
+
 createMainScreen();
