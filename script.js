@@ -1,7 +1,9 @@
 var quizContainerEl = document.querySelector(".quizContainerEl");
 var headerEl = document.querySelector(".headerEl");
-var questionEl = document.querySelector(".questionEl");
-var optionsListEl = document.querySelector(".optionsListEl");
+var questionEl = document.querySelector("#questionEl");
+var optionsEl = document.querySelector("#options-list");
+var questionCount;
+var timeLeft;
 quizContainerEl.setAttribute("style", "border: 5px solid blue;");
 
 var questions = [
@@ -20,12 +22,12 @@ function createMainScreen() {
 
 function startGame() {
     quizContainerEl.innerHTML = "";
-    var questionCount = 0;
-    var timeLeft = 10;
+    questionCount = 0;
+    timeLeft = 10;
     loadQuestion(questionCount);
     var timeInterval = setInterval(function () {
         headerEl.children[1].textContent = timeLeft;
-        timeLeft--;
+        // timeLeft--;
         if (timeLeft < 0) {
             clearInterval(timeInterval);
             quizContainerEl.textContent = "Game Over";
@@ -37,29 +39,27 @@ function startGame() {
 function loadQuestion(questionCount) {
     quizContainerEl.innerHTML = "";
     quizContainerEl.append(questionEl);
+    quizContainerEl.append(optionsEl);
     questionEl.textContent = questions[questionCount].q;
-
+    optionsEl.innerHTML = "";
     for (var i = 0; i < questions[questionCount].o.length; i++) {
         var option = document.createElement("button");
-        questions[questionCount].o[i];
-
-        
-
-        optionsListEl.append(optionButtonsEl[i]);
+        option.textContent = questions[questionCount].o[i];
+        option.setAttribute("index-number",i);       
+        optionsEl.append(option);
     }
 }
 
-
-    // optionButtonsEl.addEventListener("click", function () {
-
-    //         if(optionButtonsEl.textContent === questions[i].a){
-    //             timeLeft += 10;
-    //         }
-    //         else {
-    //             timeLeft -= 10;
-    //         }
-    // });
-
-
+optionsEl.addEventListener("click", function(event) {
+    var element = event.target;
+    if(event.target.textContent === questions[questionCount].a) {
+        timeLeft += 10;
+    }
+    else {
+        timeLeft -= 10;
+    }
+    questionCount++;
+    loadQuestion(questionCount);
+})
 
 createMainScreen();
