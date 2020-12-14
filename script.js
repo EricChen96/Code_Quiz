@@ -29,10 +29,11 @@ function startGame() {
     loadQuestion(questionCount);
     var timeInterval = setInterval(function () {
         headerEl.children[1].textContent = timeLeft;
-        // timeLeft--;
-        if (timeLeft < 0) {
+        timeLeft--;
+        if (timeLeft < 0 || questionCount == questions.length) {
             clearInterval(timeInterval);
-            quizContainerEl.textContent = "Game Over";
+            timeLeft = 0;
+            endGame();
         }
     }, 1000)
 }
@@ -56,8 +57,17 @@ function endGame() {
     quizContainerEl.innerHTML = "";
     highscore = timeLeft;
     var scoreDisplay = document.createElement("h2");
-    scoreDisplay.textContent = "Score" + highscore;
+    scoreDisplay.textContent = "Your final score is: " + highscore;
+    var initialForm = document.createElement("form");
+    var initialInput = document.createElement("input");
+    initialInput.setAttribute("type", "text");
+    initialInput.setAttribute("placeholder", "Enter your initials");
+    quizContainerEl.append(scoreDisplay);
+    quizContainerEl.append(initialForm);
+    initialForm.append(initialInput);
 }
+
+initialForm.addEventListener
 
 optionsEl.addEventListener("click", function(event) {
     var element = event.target;
