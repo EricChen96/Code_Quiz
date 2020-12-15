@@ -10,6 +10,7 @@ var optionsEl = document.querySelector("#options-list");
 var questionCount;
 var timeLeft;
 var score;
+var timeInterval;
 var highscores = [];
 quizContainerEl.setAttribute("style", "border: 5px solid blue;");
 //Start Screen elements
@@ -26,8 +27,10 @@ gameTitle.setAttribute("class","gameTitle");
 var scoreDisplay = document.createElement("h2");
 var initialForm = document.createElement("form");
 var initialInput = document.createElement("input");
-var timeInterval;
+var playAgainButton = document.createElement("button");
 var highscoresList = document.createElement("div");
+playAgainButton.setAttribute("class", "playAgainButton")
+playAgainButton.textContent = "Play Again";
 
 var questions = [
     { q: "The data type to store 'true' or 'false' is: ", o: ["String", "Integer", "Boolean", "Objects"], a: "Boolean" },
@@ -49,20 +52,9 @@ function init() {
     var storedHighscores = JSON.parse(localStorage.getItem("highscores"));
     if (storedHighscores !== null) {
         highscores = storedHighscores;
-
     }
 }
 
-function loadHighscores() {
-    quizContainerEl.innerHTML = "";
-    for (var i = 0; i < highscores.length; i++) {
-        var tempHighscore = highscores[i];
-        var li = document.createElement("li");
-        li.textContent = tempHighscore;
-        highscoresList.append(li);
-    }
-    quizContainerEl.append(highscoresList);
-}
 
 function changeTimeleft() {
     headerEl.children[1].textContent = timeLeft;
@@ -90,6 +82,8 @@ function startGame() {
 
 function loadQuestion(questionCount) {
     quizContainerEl.innerHTML = "";
+
+
     quizContainerEl.append(questionEl);
     quizContainerEl.append(optionsEl);
     questionEl.textContent = questions[questionCount].q;
@@ -98,22 +92,44 @@ function loadQuestion(questionCount) {
         var option = document.createElement("button");
         option.setAttribute("class","gameQuestionButtons")
         option.textContent = questions[questionCount].o[i];
-        option.setAttribute("index-number", i);
         optionsEl.append(option);
     }
 }
+
+optionsEl.addEventListener("click", function (event) {
+    var element = event.target;
+    if (event.target.textContent === questions[questionCount].a) {
+        timeLeft += 10;
+        changeTimeleft();
+    }
+    else {
+        timeLeft -= 10;
+        changeTimeleft();
+    }
+    questionCount++;
+    if (questionCount === questions.length || timeLeft <= 0) {  
+        endGame()
+    }
+    else {
+        loadQuestion(questionCount);
+    }
+})
 
 function endGame() {
     quizContainerEl.innerHTML = "";
     score = timeLeft;
     scoreDisplay.textContent = "Your final score is: " + score;
-
     initialInput.setAttribute("type", "text");
     initialInput.setAttribute("placeholder", "Enter your initials");
     quizContainerEl.append(scoreDisplay);
     quizContainerEl.append(initialForm);
     initialForm.append(initialInput);
+    quizContainerEl.append(playAgainButton);
 }
+
+playAgainButton.addEventListener("click", function() {
+    startGame();
+})
 
 initialForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -132,24 +148,24 @@ function storeHighscores() {
     localStorage.setItem("highscores", JSON.stringify(highscores));
 }
 
-optionsEl.addEventListener("click", function (event) {
-    var element = event.target;
-    if (event.target.textContent === questions[questionCount].a) {
-        timeLeft += 10;
-        changeTimeleft();
-    }
-    else {
-        timeLeft -= 10;
-        changeTimeleft();
-    }
-    questionCount++;
-    if (questionCount === questions.length || timeLeft <= 0) {
-        endGame()
-    }
-    else {
-        loadQuestion(questionCount);
-    }
+highscoresEl.addEventListener("click", function() {
+    loadHighscores();
 })
+
+function loadHighscores() {
+    quizContainerEl.innerHTML = "";
+    clearInterval(timeInterval);
+
+    for (var i = 0; i < highscores.length; i++) {
+        var tempHighscore = highscores[i];
+        var li = document.createElement("li");
+        li.textContent = tempHighscore.initial + " .......... " + tempHighscore.playerScore;
+        highscoresList.append(li);
+    }
+    quizContainerEl.append(highscoresList);
+    quizContainerEl.append(playAgainButton);
+}
+
 
 init();
 createMainScreen();
