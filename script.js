@@ -1,14 +1,28 @@
 var quizContainerEl = document.querySelector("#quizContainerEl");
 var headerEl = document.querySelector("#headerEl");
+var highscoresEl = document.querySelector("#highscoreEl");
+
+//Question Game elements
 var questionEl = document.querySelector("#questionEl");
 var optionsEl = document.querySelector("#options-list");
-var highscoresEl = document.querySelector("#highscoreEl");
+
+
 var questionCount;
 var timeLeft;
 var score;
 var highscores = [];
 quizContainerEl.setAttribute("style", "border: 5px solid blue;");
+//Start Screen elements
 var startButton = document.createElement("button");
+var gameTitle = document.createElement("h2");
+var gameInstructions = document.createElement("h3");
+gameTitle.textContent = "CODE QUIZ";
+startButton.textContent = "START";
+gameInstructions.textContent = "Welcome to Code Quiz. This game tests your Javascript knowledge. Click the correct answer to add time but choose incorrectly and your time would decrease by 10 seconds. Try to answer before the time runs out";
+startButton.setAttribute("class", "startButton")
+gameTitle.setAttribute("class","gameTitle");
+
+
 var scoreDisplay = document.createElement("h2");
 var initialForm = document.createElement("form");
 var initialInput = document.createElement("input");
@@ -24,23 +38,24 @@ var questions = [
 
 function createMainScreen() {
     quizContainerEl.innerHTML = "";
-    startButton.textContent = "START";
-    startButton.setAttribute("class","startButton")
+
+    quizContainerEl.append(gameTitle);
+    quizContainerEl.append(gameInstructions);
     quizContainerEl.append(startButton);
     startButton.addEventListener("click", startGame);
 }
 
 function init() {
     var storedHighscores = JSON.parse(localStorage.getItem("highscores"));
-    if(storedHighscores !== null) {
+    if (storedHighscores !== null) {
         highscores = storedHighscores;
-        
+
     }
 }
 
 function loadHighscores() {
     quizContainerEl.innerHTML = "";
-    for(var i =0; i<highscores.length; i++) {
+    for (var i = 0; i < highscores.length; i++) {
         var tempHighscore = highscores[i];
         var li = document.createElement("li");
         li.textContent = tempHighscore;
@@ -81,6 +96,7 @@ function loadQuestion(questionCount) {
     optionsEl.innerHTML = "";
     for (var i = 0; i < questions[questionCount].o.length; i++) {
         var option = document.createElement("button");
+        option.setAttribute("class","gameQuestionButtons")
         option.textContent = questions[questionCount].o[i];
         option.setAttribute("index-number", i);
         optionsEl.append(option);

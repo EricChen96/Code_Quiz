@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box
+} 
+
 #headerEl {
     font-size: 20px;
     display: inline;
@@ -28,14 +32,26 @@
 .startButton {
     margin: 0;
     position: absolute;
-    top: 50%;
+    top: 70%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
-button {
+.gameTitle {
+    text-align: center;
+    font-size: 50px;
+}
+
+#questionEl {
+    height:30%;
+    font-size: 30px
+}
+
+.gameQuestionButtons {
     position: relative;
     height: 15%;
     text-align: center;
+    width: 100%;
+    height: 50px;
 }
