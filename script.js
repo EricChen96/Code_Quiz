@@ -21,16 +21,27 @@ gameTitle.textContent = "CODE QUIZ";
 startButton.textContent = "START";
 gameInstructions.textContent = "Welcome to Code Quiz. This game tests your Javascript knowledge. Click the correct answer to add time but choose incorrectly and your time would decrease by 10 seconds. Try to answer before the time runs out";
 startButton.setAttribute("class", "startButton")
-gameTitle.setAttribute("class","gameTitle");
+gameTitle.setAttribute("class", "gameTitle");
 
 
 var scoreDisplay = document.createElement("h2");
 var initialForm = document.createElement("form");
 var initialInput = document.createElement("input");
 var playAgainButton = document.createElement("button");
-var highscoresList = document.createElement("div");
+
+
 playAgainButton.setAttribute("class", "playAgainButton")
+
+//Highscores page elements
+var highscoresList = document.createElement("ol");
+var highscoresTitle = document.createElement("h2");
+var resetHighscoresButton = document.createElement("button");
+highscoresList.setAttribute("class","highscoresList");
 playAgainButton.textContent = "Play Again";
+highscoresTitle.textContent = "HIGHSCORES";
+resetHighscoresButton.textContent = "Reset Highscores";
+resetHighscoresButton.setAttribute("class","resetButton");
+highscoresTitle.setAttribute("class","highscoresTitle");
 
 var questions = [
     { q: "The data type to store 'true' or 'false' is: ", o: ["String", "Integer", "Boolean", "Objects"], a: "Boolean" },
@@ -41,7 +52,6 @@ var questions = [
 
 function createMainScreen() {
     quizContainerEl.innerHTML = "";
-
     quizContainerEl.append(gameTitle);
     quizContainerEl.append(gameInstructions);
     quizContainerEl.append(startButton);
@@ -90,7 +100,7 @@ function loadQuestion(questionCount) {
     optionsEl.innerHTML = "";
     for (var i = 0; i < questions[questionCount].o.length; i++) {
         var option = document.createElement("button");
-        option.setAttribute("class","gameQuestionButtons")
+        option.setAttribute("class", "gameQuestionButtons")
         option.textContent = questions[questionCount].o[i];
         optionsEl.append(option);
     }
@@ -107,7 +117,7 @@ optionsEl.addEventListener("click", function (event) {
         changeTimeleft();
     }
     questionCount++;
-    if (questionCount === questions.length || timeLeft <= 0) {  
+    if (questionCount === questions.length || timeLeft <= 0) {
         endGame()
     }
     else {
@@ -127,7 +137,7 @@ function endGame() {
     quizContainerEl.append(playAgainButton);
 }
 
-playAgainButton.addEventListener("click", function() {
+playAgainButton.addEventListener("click", function () {
     startGame();
 })
 
@@ -138,33 +148,47 @@ initialForm.addEventListener("submit", function (event) {
         return;
     }
     var tempScore = { initial: initialText, playerScore: score };
-    highscores.push(tempScore);
-    storeHighscores();
+    if (highscores.length < 10 || highscores === null) {
+        highscores.push(tempScore);
+        storeHighscores();
+    }
+    else {
+        highscores.shift();
+        highscores.push(tempScore);
+        storeHighscores();
+    }
     initialInput.value = "";
-    createMainScreen();
 })
 
 function storeHighscores() {
     localStorage.setItem("highscores", JSON.stringify(highscores));
 }
 
-highscoresEl.addEventListener("click", function() {
+highscoresEl.addEventListener("click", function () {
     loadHighscores();
 })
 
 function loadHighscores() {
-    quizContainerEl.innerHTML = "";
     clearInterval(timeInterval);
+    quizContainerEl.innerHTML = "";
+    highscoresList.innerHTML = "";
 
     for (var i = 0; i < highscores.length; i++) {
-        var tempHighscore = highscores[i];
         var li = document.createElement("li");
-        li.textContent = tempHighscore.initial + " .......... " + tempHighscore.playerScore;
+        li.textContent = highscores[i].initial + " .......... " + highscores[i].playerScore;
         highscoresList.append(li);
     }
+    quizContainerEl.append(highscoresTitle);
     quizContainerEl.append(highscoresList);
     quizContainerEl.append(playAgainButton);
+    quizContainerEl.append(resetHighscoresButton);
 }
+
+resetHighscoresButton.addEventListener("click", function() {
+    highscores = [];
+    storeHighscores();
+    loadHighscores();
+})
 
 
 init();
