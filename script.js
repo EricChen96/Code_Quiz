@@ -1,7 +1,8 @@
-var quizContainerEl = document.querySelector(".quizContainerEl");
-var headerEl = document.querySelector(".headerEl");
+var quizContainerEl = document.querySelector("#quizContainerEl");
+var headerEl = document.querySelector("#headerEl");
 var questionEl = document.querySelector("#questionEl");
 var optionsEl = document.querySelector("#options-list");
+var highscoresEl = document.querySelector("#highscoreEl");
 var questionCount;
 var timeLeft;
 var score;
@@ -11,6 +12,8 @@ var startButton = document.createElement("button");
 var scoreDisplay = document.createElement("h2");
 var initialForm = document.createElement("form");
 var initialInput = document.createElement("input");
+var timeInterval;
+var highscoresList = document.createElement("div");
 
 var questions = [
     { q: "The data type to store 'true' or 'false' is: ", o: ["String", "Integer", "Boolean", "Objects"], a: "Boolean" },
@@ -22,8 +25,28 @@ var questions = [
 function createMainScreen() {
     quizContainerEl.innerHTML = "";
     startButton.textContent = "START";
+    startButton.setAttribute("class","startButton")
     quizContainerEl.append(startButton);
     startButton.addEventListener("click", startGame);
+}
+
+function init() {
+    var storedHighscores = JSON.parse(localStorage.getItem("highscores"));
+    if(storedHighscores !== null) {
+        highscores = storedHighscores;
+        
+    }
+}
+
+function loadHighscores() {
+    quizContainerEl.innerHTML = "";
+    for(var i =0; i<highscores.length; i++) {
+        var tempHighscore = highscores[i];
+        var li = document.createElement("li");
+        li.textContent = tempHighscore;
+        highscoresList.append(li);
+    }
+    quizContainerEl.append(highscoresList);
 }
 
 function changeTimeleft() {
@@ -35,7 +58,7 @@ function startGame() {
     questionCount = 0;
     timeLeft = 10;
     loadQuestion(questionCount);
-    var timeInterval = setInterval(function () {
+    timeInterval = setInterval(function () {
         if (timeLeft < 0 || questionCount === questions.length) {
             clearInterval(timeInterval);
             timeLeft = timeLeft < 0 ? 0 : timeLeft;
@@ -104,13 +127,13 @@ optionsEl.addEventListener("click", function (event) {
         changeTimeleft();
     }
     questionCount++;
-    if (questionCount === questions.length) {
+    if (questionCount === questions.length || timeLeft <= 0) {
         endGame()
     }
     else {
         loadQuestion(questionCount);
-
     }
 })
 
+init();
 createMainScreen();
