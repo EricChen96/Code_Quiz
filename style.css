@@ -1,22 +1,21 @@
-* {
-    box-sizing: border-box
-} 
-
+/* For containing highscore and time left */
 #headerEl {
     font-size: 20px;
     display: inline;
 }
 
+/* have the highscore on the left of header */
 #highscoreEl {
     float:left;
     margin-left: 40px;
 }
-
+/* Putting the time left amount to the right of highscore */
 #timeEl {
     float:right;
     margin-right: 40px;
 }
 
+/* container for game */
 #quizContainerEl {
     width: 60%;
     height: 400px;
@@ -29,7 +28,8 @@
     
 }
 
-.startButton {
+/* Putting the start button in horizontal middle */
+.startButton, .resetButton {
     margin: 0;
     position: absolute;
     top: 70%;
@@ -38,26 +38,30 @@
     transform: translate(-50%, -50%);
 }
 
+/* putting play again button in horizontal middle */
 .playAgainButton {
     margin: 0;
     position: absolute;
-    top: 70%;
+    top: 80%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
 
+/* Center title of game on start screen */
 .gameTitle {
     text-align: center;
     font-size: 50px;
 }
 
+/* Have question dialog take up 30% of game container height and bolded */
 #questionEl {
     height:30%;
     font-size: 30px;
-    font: 
+    font-weight: bold;
 }
 
+/* create buttons for question options */
 .gameQuestionButtons {
     position: relative;
     text-align: center;
@@ -65,14 +69,13 @@
     height: 45px;
 }
 
-.highscoresList {
+/* Making highscore title and the highscores center  */
+.highscoresList, .highscoresTitle  {
     text-align: center;
-    /* justify-content: center; */
-    width: 100%;
-}
-.highscoresTitle {
-    text-align: center;
-    /* justify-content: center; */
     width: 100%;
 }
 
+/* make font red for isCorrect message */
+.isCorrectMessage {
+    color: red;
+}
